@@ -227,7 +227,7 @@ def process_all_items(
     llm = ChatOpenAI(
         model=model_name,
         temperature=0.1,
-        model_kwargs={"extra_body": {"thinking": {"type": "disabled"}}},
+        extra_body={"thinking": {"type": "disabled"}},
     ).with_structured_output(
         RelevanceFilter, method="function_calling"
     )
