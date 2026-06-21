@@ -1,0 +1,572 @@
+# Robotics Daily arXiv — Topic Configuration
+# 修改此文件即可调整过滤方向，无需重新爬取或摘要
+# docs/specs/SPEC.md 中的定义是权威参考
+
+topics:
+  - id: vla
+    name: "VLA (Vision-Language-Action)"
+    description: >
+      视觉-语言-动作模型，将视觉感知和自然语言指令映射为机器人动作。
+      包括但不限于：RT-1/RT-2/RT-X, PALM-E, Octo, OpenVLA, π0 等模型。
+    keywords:
+      - vision-language-action
+      - VLA
+      - visuomotor
+      - instruction following
+      - language-conditioned manipulation
+      - robot foundation model
+      - generalist robot policy
+      - embodied agent
+
+  - id: wam
+    name: "World Action Model (WAM)"
+    description: >
+      世界动作模型，学习预测动作在环境中的后果。核心是做 world model 与 action 的结合——
+      给定当前观测和动作，预测未来状态/视频帧，用于机器人规划和决策。
+      包括但不限于：视频生成式 world model、action-conditioned video prediction、
+      基于 world model 的 planning/RL、Genie/UniSim 等。
+    keywords:
+      - world model
+      - world action model
+      - action-conditioned video prediction
+      - video generation for planning
+      - model-based reinforcement learning
+      - learned dynamics model
+      - latent world model
+      - predictive model
+      - future state prediction
+      - video prediction
+      - Genie
+      - UniSim
+      - Dreamer
+      - observation prediction
+      - forward dynamics
+
+  - id: navigation
+    name: "Robot Navigation"
+    description: >
+      机器人导航，包括视觉导航、语义导航、社交导航、SLAM 等。
+    keywords:
+      - visual navigation
+      - autonomous navigation
+      - SLAM
+      - path planning
+      - exploration
+      - semantic navigation
+      - social navigation
+      - mapless navigation
+      - point-goal navigation
+      - object-goal navigation
+
+  - id: motion-planning
+    name: "Motion Planning"
+    description: >
+      运动规划，包括轨迹优化、采样规划、强化学习运动规划等。
+    keywords:
+      - motion planning
+      - trajectory optimization
+      - path planning
+      - sampling-based planning
+      - optimization-based planning
+      - kinodynamic planning
+      - motion primitive
+
+  - id: physics-motion
+    name: "Physics-based Motion Mimic & Interaction"
+    description: >
+      基于物理的角色运动模仿与交互，源自 Xuebin (Jason) Peng 等人的工作线
+      （DeepMimic, ASE, AMP 等）及其衍生方向。
+      核心关注：(1) 物理仿真中的运动模仿/跟踪——从 mocap 数据学习控制策略；
+      (2) sim-to-real 迁移；(3) 角色动画与人体运动合成；
+      **特别关注：与物体/环境交互的动作 mimic——角色在模仿运动的同时与物体交互
+      （如搬运、推开、抓取等物理交互行为）。**
+      涉及平台：Isaac Gym, Isaac Sim, MuJoCo 等。
+    keywords:
+      - DeepMimic
+      - motion imitation
+      - motion tracking
+      - physics-based animation
+      - physics-based character animation
+      - motion capture
+      - physics simulation
+      - reinforcement learning locomotion
+      - sim-to-real
+      - Isaac Gym
+      - Isaac Sim
+      - MuJoCo
+      - adversarial motion prior
+      - AMP
+      - object interaction
+      - physical interaction
+      - character-object interaction
+      - whole-body manipulation
+      - physics-based grasping
+      - contact-rich motion
+      - humanoid motion synthesis
+      - human motion reconstruction
+      - kinematic tracking
+      - real-time motion tracking
+      - physics-based motion generation
+
+  - id: whole-body-control
+    name: "Whole Body Control"
+    description: >
+      全身控制，包括全身运动控制、全身 MPC、人形机器人全身控制、接触感知控制。
+    keywords:
+      - whole-body control
+      - whole-body MPC
+      - model predictive control
+      - locomotion control
+      - balance control
+      - humanoid control
+      - bipedal locomotion
+      - quadrupedal locomotion
+      - contact-aware control
+      - operational space control
+      - task-space control
+      - hierarchical control
+
+  - id: other
+    name: "Other Relevant Robotics"
+    description: >
+      其他值得关注的机器人学论文，包括但不限于：强化学习用于机器人、
+      机器人操作、灵巧手、具身智能等未涵盖在上述方向中的重要工作。
+    keywords:
+      - reinforcement learning
+      - imitation learning
+      - learning from demonstration
+      - robot manipulation
+      - embodied AI
+      - robotic grasping
+      - sim-to-real transfer
+      - domain randomization
+      - teleoperation
+
+# ──────────────────────────────────────
+# 关注列表：名组/大厂/名作者
+# 命中即标记为 relevant，不必同时命中 topic 关键词
+# 阶段 1 字符串匹配 → 命中直接标记 from_watchlist=true
+# ──────────────────────────────────────
+watched:
+  # ── 国际大厂 robotics 团队 ──
+  labs:
+    - name: "NVIDIA GEAR Lab"
+      description: "Jim Fan / Yuke Zhu 组，VLA、robot foundation model、simulation"
+      keywords:
+        - Jim Fan
+        - Yuke Zhu
+        - GEAR Lab
+        - NVIDIA Robotics
+    - name: "Google DeepMind Robotics"
+      description: "RT 系列、Gemini Robotics、VLA"
+      keywords:
+        - Google DeepMind
+        - DeepMind
+        - RT-1
+        - RT-2
+        - RT-X
+        - Gemini Robotics
+        - Robotics at Google
+    - name: "Meta FAIR / Embodied AI"
+      description: "Meta AI robotics, embodied agents"
+      keywords:
+        - Meta AI
+        - Facebook AI Research
+        - FAIR
+        - Meta Robotics
+    - name: "OpenAI Robotics"
+      description: "OpenAI 机器人相关"
+      keywords:
+        - OpenAI
+    - name: "Apple Robotics / MLR"
+      description: "Apple 机器人/具身智能研究"
+      keywords:
+        - Apple Robotics
+        - Apple MLR
+    - name: "Amazon Robotics"
+      description: "Amazon 仓储/物流机器人"
+      keywords:
+        - Amazon Robotics
+        - Amazon Science
+    - name: "Microsoft Research"
+      description: "MSR robotics"
+      keywords:
+        - Microsoft Research
+        - MSR
+
+    # ── 国际知名高校 robotics 组 ──
+    - name: "Stanford IRIS / SVL / ILIAD"
+      description: "Stanford robotics labs"
+      keywords:
+        - Stanford Vision
+        - Stanford IRIS
+        - Stanford SVL
+        - Stanford ILIAD
+        - Fei-Fei Li
+        - Chelsea Finn
+        - Dorsa Sadigh
+        - Jeannette Bohg
+        - Shuran Song
+    - name: "MIT CSAIL / Improbable AI"
+      description: "MIT robotics & RL"
+      keywords:
+        - MIT CSAIL
+        - Improbable AI
+        - Pulkit Agrawal
+        - Leslie Kaelbling
+        - Tomas Lozano-Perez
+        - Russ Tedrake
+    - name: "CMU Robotics Institute"
+      description: "CMU robotics, manipulation, locomotion"
+      keywords:
+        - Carnegie Mellon
+        - CMU Robotics
+        - CMU Robotics Institute
+        - Deepak Pathak
+        - Abhinav Gupta
+        - Katerina Fragkiadaki
+        - David Held
+        - Matthew Johnson-Roberson
+    - name: "UC Berkeley BAIR / RAIL"
+      description: "Berkeley robotics & RL"
+      keywords:
+        - UC Berkeley
+        - BAIR
+        - RAIL Lab
+        - Sergey Levine
+        - Pieter Abbeel
+        - Ken Goldberg
+        - Jitendra Malik
+    - name: "UPenn GRASP Lab"
+      description: "UPenn robotics"
+      keywords:
+        - UPenn GRASP
+        - GRASP Lab
+        - Vijay Kumar
+        - Dinesh Jayaraman
+    - name: "Georgia Tech"
+      description: "Georgia Tech robotics & RL"
+      keywords:
+        - Georgia Institute of Technology
+        - Georgia Tech
+        - Animesh Garg
+        - Seth Hutchinson
+        - Sonia Chernova
+    - name: "UT Austin"
+      description: "UT Austin robotics"
+      keywords:
+        - UT Austin
+        - Texas Robotics
+        - Peter Stone
+        - Scott Niekum
+        - Yuke Zhu
+    - name: "NYU / NYU Courant"
+      description: "NYU robotics"
+      keywords:
+        - New York University
+        - NYU Robotics
+        - Lerrel Pinto
+    - name: "UIUC"
+      description: "UIUC robotics"
+      keywords:
+        - UIUC
+        - Illinois Robotics
+        - Saurabh Gupta
+    - name: "Oxford Robotics Institute"
+      description: "Oxford robotics"
+      keywords:
+        - Oxford Robotics Institute
+        - ORI
+        - Ingmar Posner
+        - Nick Hawes
+    - name: "Imperial College London"
+      description: "Imperial robotics"
+      keywords:
+        - Imperial College
+        - Imperial Robotics
+        - Edward Johns
+    - name: "ETH Zurich / UZH Robotics"
+      description: "ETH/UZH robotics, legged locomotion, control"
+      keywords:
+        - ETH Zurich
+        - ETH AI Center
+        - UZH Robotics
+        - Marco Hutter
+        - Stelian Coros
+        - Robert Katzschmann
+    - name: "TU Munich / TU Darmstadt"
+      description: "TUM/TU Darm robotics"
+      keywords:
+        - TU Munich
+        - TU Darmstadt
+        - Georgia Chalvatzaki
+        - Jan Peters
+    - name: "University of Washington"
+      description: "UW robotics & RL"
+      keywords:
+        - University of Washington
+        - UW Robotics
+        - Dieter Fox
+        - Byron Boots
+        - Abhishek Gupta
+
+    # ── 国际机器人公司 ──
+    - name: "Boston Dynamics"
+      description: "Atlas, Spot, 全身控制"
+      keywords:
+        - Boston Dynamics
+        - Scott Kuindersma
+    - name: "Tesla / Tesla Optimus"
+      description: "人形机器人 Optimus"
+      keywords:
+        - Tesla Bot
+        - Tesla Optimus
+    - name: "Figure AI"
+      description: "人形机器人 Figure"
+      keywords:
+        - Figure AI
+        - Figure Robotics
+    - name: "1X Technologies"
+      description: "人形机器人 NEO"
+      keywords:
+        - 1X Technologies
+        - 1X Robotics
+    - name: "Toyota Research Institute"
+      description: "TRI robotics"
+      keywords:
+        - Toyota Research Institute
+        - TRI
+    - name: "Agility Robotics"
+      description: "Digit 人形机器人"
+      keywords:
+        - Agility Robotics
+    - name: "Sanctuary AI"
+      description: "Phoenix 人形机器人"
+      keywords:
+        - Sanctuary AI
+    - name: "Apptronik"
+      description: "Apollo 人形机器人"
+      keywords:
+        - Apptronik
+
+    # ── 中国大厂 robotics 团队 ──
+    - name: "华为 Noah's Ark / 具身智能"
+      description: "华为机器人研究、具身智能、自动驾驶"
+      keywords:
+        - Huawei
+        - 华为
+        - Noah's Ark
+        - 华为诺亚
+    - name: "腾讯 Robotics X"
+      description: "腾讯机器人实验室，灵巧手、四足、移动操作"
+      keywords:
+        - Tencent Robotics X
+        - 腾讯 Robotics X
+        - 腾讯机器人
+    - name: "阿里巴巴 / 达摩院"
+      description: "阿里达摩院机器人、具身智能"
+      keywords:
+        - Alibaba
+        - 阿里巴巴
+        - 达摩院
+        - Damo Academy
+    - name: "百度 / 百度机器人"
+      description: "百度具身智能、自动驾驶 Apollo、飞桨"
+      keywords:
+        - Baidu
+        - 百度
+        - Baidu Research
+    - name: "字节跳动 / ByteDance Research"
+      description: "字节 AI/机器人研究"
+      keywords:
+        - ByteDance
+        - 字节跳动
+        - ByteDance Research
+    - name: "小米 / Xiaomi Robotics"
+      description: "小米 CyberOne/CyberDog 机器人"
+      keywords:
+        - Xiaomi
+        - 小米
+        - CyberOne
+        - CyberDog
+    - name: "美团 / 美团无人机"
+      description: "美团无人配送、无人机"
+      keywords:
+        - Meituan
+        - 美团
+
+    # ── 中国机器人初创公司 ──
+    - name: "宇树科技 / Unitree"
+      description: "四足/人形机器人，H1/G1/B2"
+      keywords:
+        - Unitree
+        - 宇树
+        - Unitree Robotics
+    - name: "智元机器人 / Agibot"
+      description: "人形机器人，稚晖君"
+      keywords:
+        - Agibot
+        - 智元
+        - 智元机器人
+    - name: "星尘智能 / Astribot"
+      description: "人形机器人"
+      keywords:
+        - Astribot
+        - 星尘智能
+    - name: "傅利叶智能 / Fourier Intelligence"
+      description: "通用人形机器人 GR 系列"
+      keywords:
+        - Fourier Intelligence
+        - 傅利叶
+        - Fourier GR
+    - name: "优必选 / UBTech"
+      description: "人形机器人 Walker"
+      keywords:
+        - UBTech
+        - 优必选
+        - Walker Robot
+    - name: "银河通用 / Galbot"
+      description: "通用机器人，embodied AI"
+      keywords:
+        - Galbot
+        - 银河通用
+    - name: "星海图智能"
+      description: "具身智能"
+      keywords:
+        - 星海图
+        - 星海图智能
+    - name: "地平线 / Horizon Robotics"
+      description: "机器人芯片、具身智能计算平台"
+      keywords:
+        - Horizon Robotics
+        - 地平线
+        - 地平线机器人
+    - name: "云深处 / Deep Robotics"
+      description: "四足机器人"
+      keywords:
+        - Deep Robotics
+        - 云深处
+    - name: "小鹏鹏行 / XPeng Robotics"
+      description: "小鹏机器人/自动驾驶"
+      keywords:
+        - XPeng
+        - 小鹏
+        - 小鹏鹏行
+    - name: "达闼 / CloudMinds"
+      description: "云端智能机器人"
+      keywords:
+        - CloudMinds
+        - 达闼
+    - name: "追觅 / Dreame"
+      description: "扫地机器人 + 具身智能"
+      keywords:
+        - Dreame
+        - 追觅
+    - name: "松灵机器人 / AgileX"
+      description: "移动机器人底盘、具身智能平台"
+      keywords:
+        - AgileX
+        - 松灵
+        - 松灵机器人
+
+  # ── 个人作者 ──
+  authors:
+    # Physics-based Animation / Motion
+    - name: "Xuebin Peng"
+      note: "DeepMimic, AMP, ASE, physics-based character animation"
+    - name: "Jason Peng"
+      note: "DeepMimic, AMP, ASE, physics-based character animation (alias)"
+    - name: "Michiel van de Panne"
+      note: "Physics-based animation, character control"
+    - name: "Jessica Hodgins"
+      note: "Character animation, motion capture"
+    - name: "Sehoon Ha"
+      note: "Physics-based animation, RL for locomotion"
+    - name: "C. Karen Liu"
+      note: "Physics-based animation, character control"
+
+    # Whole-body Control / Locomotion
+    - name: "Russ Tedrake"
+      note: "Whole-body control, manipulation, Drake, humanoid"
+    - name: "Scott Kuindersma"
+      note: "Atlas whole-body locomotion and control"
+    - name: "Marco Hutter"
+      note: "Legged locomotion, whole-body control, ANYmal"
+    - name: "Donghyun Kim"
+      note: "Legged locomotion, whole-body MPC"
+    - name: "Sangbae Kim"
+      note: "MIT Cheetah, legged robot design and control"
+    - name: "Aaron Ames"
+      note: "Bipedal locomotion, control theory, Cassie"
+
+    # VLA / Robot Foundation Models
+    - name: "Yuke Zhu"
+      note: "VLA, robot manipulation, foundation models"
+    - name: "Jim Fan"
+      note: "VLA, foundation models, simulation, embodied AI"
+    - name: "Chelsea Finn"
+      note: "Imitation learning, VLA, robot manipulation"
+    - name: "Sergey Levine"
+      note: "RL for robotics, manipulation, locomotion"
+    - name: "Pieter Abbeel"
+      note: "RL, imitation learning, robot learning"
+    - name: "Mohit Shridhar"
+      note: "VLA, language-conditioned manipulation, RT系列"
+    - name: "Katerina Fragkiadaki"
+      note: "VLA, learning from video, 3D vision for robotics"
+    - name: "Dinesh Jayaraman"
+      note: "Robot learning, visual representation for manipulation"
+    - name: "Lerrel Pinto"
+      note: "Robot learning, self-supervised, real-world RL"
+
+    # Manipulation / Grasping
+    - name: "Ken Goldberg"
+      note: "Robot manipulation, grasping, surgical robotics"
+    - name: "Jeannette Bohg"
+      note: "Robot manipulation, perception, contact-rich"
+    - name: "Animesh Garg"
+      note: "VLA, simulation, dexterous manipulation"
+    - name: "Shuran Song"
+      note: "Robot perception, manipulation, one-shot learning"
+    - name: "Dieter Fox"
+      note: "Robot perception, manipulation, RGB-D"
+    - name: "Edward Johns"
+      note: "Robot manipulation, learning from demonstration"
+
+    # Navigation / Planning
+    - name: "Deepak Pathak"
+      note: "RL, locomotion, curiousity-driven exploration, navigation"
+    - name: "Pulkit Agrawal"
+      note: "RL, locomotion, robot learning, curiosity"
+    - name: "Abhinav Gupta"
+      note: "Robot learning, self-supervised, manipulation"
+
+    # Human-Robot Interaction / Learning
+    - name: "Dorsa Sadigh"
+      note: "Human-robot interaction, learning from human feedback"
+    - name: "Georgia Chalvatzaki"
+      note: "Robot learning, human-robot interaction, manipulation"
+    - name: "Sonia Chernova"
+      note: "Robot learning, HRI, semantic reasoning"
+    - name: "Jan Peters"
+      note: "Robot learning, RL, motor skills"
+
+    # 中国学者
+    - name: "Huazhe Xu"
+      note: "RL for robotics, manipulation, sim-to-real"
+    - name: "Hang Zhao"
+      note: "Embodied AI, VLA, autonomous driving"
+    - name: "He Wang"
+      note: "Robot manipulation, sim-to-real, RL"
+    - name: "Jianlan Luo"
+      note: "Robot manipulation, tactile sensing"
+    - name: "Xiaolong Wang"
+      note: "Robot learning, video-based manipulation, VLA"
+    - name: "Yunzhu Li"
+      note: "Robot learning, dynamics models, tactile sensing"
+    - name: "Chuang Gan"
+      note: "Embodied AI, VLA, robot simulation"
+    - name: "Hao Su"
+      note: "Robot learning, dexterous manipulation, sim-to-real"
+    - name: "Shaojie Bai"
+      note: "Robot learning, RL, transformer methods"
