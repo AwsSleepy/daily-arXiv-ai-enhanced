@@ -10,7 +10,6 @@ from typing import List, Dict, Set, Optional
 from tqdm import tqdm
 
 from langchain_openai import ChatOpenAI
-from langchain_core.exceptions import OutputParserException
 from langchain.prompts import (
     ChatPromptTemplate,
     SystemMessagePromptTemplate,
@@ -146,21 +145,33 @@ SYSTEM_PROMPT = """\
 1. 宽松匹配——如果论文的技术方法可能应用于某方向，也可标记
 2. 一篇论文可以属于多个方向（matched_topics 填对应的 id）
 3. 如果来自关注列表中的组/作者，标记 from_watchlist=true
-4. 给出置信度（0-1）和一句话理由"""
+4. 给出置信度（0-1）和一句话理由
+
+Return ONLY a valid JSON object. Do NOT use Markdown code fences. Fields: is_relevant (bool), matched_topics (list of strings), from_watchlist (bool), confidence (float 0-1), reason (string)."""
 
 
 def stage2_llm_filter(chain, paper: dict) -> dict:
-    """阶段 2：LLM 判断相关性"""
+    """阶段 2：LLM 判断相关性（JSON mode）"""
     try:
-        result: RelevanceFilter = chain.invoke({
+        response = chain.invoke({
             "title": paper.get("title", ""),
             "authors": paper.get("authors", ""),
             "summary": paper.get("summary", ""),
             "tldr": paper.get("AI", {}).get("tldr", ""),
             "method": paper.get("AI", {}).get("method", ""),
         })
-        return result.model_dump()
-    except (OutputParserException, Exception) as e:
+        raw = response.content.strip()
+        # Strip markdown fences
+        raw = re.sub(r"^```(?:json)?\s*\n?", "", raw, flags=re.IGNORECASE)
+        raw = re.sub(r"\n?\s*```$", "", raw)
+        raw = raw.strip()
+        # Extract JSON object if surrounded by text
+        match = re.search(r'\{.*\}', raw, re.DOTALL)
+        if match:
+            raw = match.group(0)
+        parsed = json.loads(raw)
+        return RelevanceFilter.model_validate(parsed).model_dump()
+    except Exception as e:
         print(f"LLM filter failed for {paper.get('id', 'unknown')}: {e}", file=sys.stderr)
         return {
             "is_relevant": False,
@@ -228,8 +239,7 @@ def process_all_items(
         model=model_name,
         temperature=0.1,
         extra_body={"thinking": {"type": "disabled"}},
-    ).with_structured_output(
-        RelevanceFilter, method="function_calling"
+        model_kwargs={"response_format": {"type": "json_object"}},
     )
     chain = prompt_template | llm
 

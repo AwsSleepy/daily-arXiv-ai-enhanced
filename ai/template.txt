@@ -1,4 +1,4 @@
-Please analyze the following abstract of papers. 
+Please analyze the following abstract of papers. Return ONLY a valid JSON object with fields: tldr, motivation, method, result, conclusion. No markdown, no extra text.
 
 Content:
 {content}

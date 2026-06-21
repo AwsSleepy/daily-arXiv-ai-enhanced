@@ -13,7 +13,6 @@ import dotenv
 import argparse
 from tqdm import tqdm
 
-import langchain_core.exceptions
 from langchain_openai import ChatOpenAI
 from langchain.prompts import (
     ChatPromptTemplate,
@@ -123,41 +122,30 @@ def process_single_item(chain, item: Dict, language: str) -> Dict:
         "result": "Result analysis unavailable",
         "conclusion": "Conclusion extraction failed"
     }
-    
+
+    def _parse_json_response(raw_text: str) -> dict:
+        """Parse JSON from LLM response text, handling markdown fences."""
+        raw = raw_text.strip()
+        # Remove markdown code fences
+        raw = re.sub(r"^```(?:json)?\s*\n?", "", raw, flags=re.IGNORECASE)
+        raw = re.sub(r"\n?\s*```$", "", raw)
+        raw = raw.strip()
+        # Try to find a JSON object if there's surrounding text
+        match = re.search(r'\{.*\}', raw, re.DOTALL)
+        if match:
+            raw = match.group(0)
+        return json.loads(raw)
+
     try:
-        response: Structure = chain.invoke({
+        response = chain.invoke({
             "language": language,
             "content": item['summary']
         })
-        item['AI'] = response.model_dump()
-    except langchain_core.exceptions.OutputParserException as e:
-        # 尝试从错误信息中提取 JSON 字符串并修复
-        error_msg = str(e)
-        partial_data = {}
-        
-        if "Function Structure arguments:" in error_msg:
-            try:
-                # 提取 JSON 字符串
-                json_str = error_msg.split("Function Structure arguments:", 1)[1].strip().split('are not valid JSON')[0].strip()
-                # 预处理 LaTeX 数学符号 - 使用四个反斜杠来确保正确转义
-                json_str = json_str.replace('\\', '\\\\')
-                # 尝试解析修复后的 JSON
-                partial_data = json.loads(json_str)
-            except Exception as json_e:
-                print(f"Failed to parse JSON for {item.get('id', 'unknown')}: {json_e}", file=sys.stderr)
-        
-        # Merge partial data with defaults to ensure all fields exist
-        item['AI'] = {**default_ai_fields, **partial_data}
-        print(f"Using partial AI data for {item.get('id', 'unknown')}: {list(partial_data.keys())}", file=sys.stderr)
-    except Exception as e:
-        # Catch any other exceptions and provide default values
-        print(f"Unexpected error for {item.get('id', 'unknown')}: {e}", file=sys.stderr)
-        item['AI'] = default_ai_fields
-    
-    # Final validation to ensure all required fields exist
-    for field in default_ai_fields.keys():
-        if field not in item['AI']:
-            item['AI'][field] = default_ai_fields[field]
+        parsed = _parse_json_response(response.content)
+        item['AI'] = Structure.model_validate(parsed).model_dump()
+    except (json.JSONDecodeError, Exception) as e:
+        print(f"JSON parse error for {item.get('id', 'unknown')}: {e}", file=sys.stderr)
+        item['AI'] = dict(default_ai_fields)
 
     # 检查 AI 生成的所有字段
     for v in item.get("AI", {}).values():
@@ -170,9 +158,10 @@ def process_all_items(data: List[Dict], model_name: str, language: str, max_work
     llm = ChatOpenAI(
         model=model_name,
         extra_body={"thinking": {"type": "disabled"}},
-    ).with_structured_output(Structure, method="function_calling")
+        model_kwargs={"response_format": {"type": "json_object"}},
+    )
     print('Connect to:', model_name, file=sys.stderr)
-    
+
     prompt_template = ChatPromptTemplate.from_messages([
         SystemMessagePromptTemplate.from_template(system),
         HumanMessagePromptTemplate.from_template(template=template)
